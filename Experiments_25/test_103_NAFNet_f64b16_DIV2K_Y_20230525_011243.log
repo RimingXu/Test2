@@ -1,0 +1,707 @@
+2023-05-25 01:12:43,470 INFO: 
+                ____                _       _____  ____
+               / __ ) ____ _ _____ (_)_____/ ___/ / __ \
+              / __  |/ __ `// ___// // ___/\__ \ / /_/ /
+             / /_/ // /_/ /(__  )/ // /__ ___/ // _, _/
+            /_____/ \__,_//____//_/ \___//____//_/ |_|
+     ______                   __   __                 __      __
+    / ____/____   ____   ____/ /  / /   __  __ _____ / /__   / /
+   / / __ / __ \ / __ \ / __  /  / /   / / / // ___// //_/  / /
+  / /_/ // /_/ // /_/ // /_/ /  / /___/ /_/ // /__ / /<    /_/
+  \____/ \____/ \____/ \____/  /_____/\____/ \___//_/|_|  (_)
+    
+Version Information: 
+	BasicSR: 1.4.2
+	PyTorch: 2.0.1+cu117
+	TorchVision: 0.15.2+cu117
+2023-05-25 01:12:43,471 INFO: 
+  name: 103_NAFNet_f64b16_DIV2K_Y
+  model_type: OpticModel
+  scale: 4
+  num_gpu: 1
+  manual_seed: 0
+  datasets:[
+    test_1:[
+      name: Real
+      type: PairedImageDataset
+      dataroot_gt: /home/cuhksz-aci-01/Dataset/PSF_f17/Real/HR
+      dataroot_lq: /home/cuhksz-aci-01/Dataset/PSF_f17/Real/LR
+      io_backend:[
+        type: disk
+      ]
+      color: y
+      phase: test
+      scale: 4
+    ]
+    test_2:[
+      name: RealFace
+      type: SingleImageDataset
+      dataroot_lq: /home/cuhksz-aci-01/Dataset/PSF_f17/Scenery/
+      io_backend:[
+        type: disk
+      ]
+      color: y
+      phase: test
+      scale: 4
+    ]
+  ]
+  network_g:[
+    type: NAFNetLocal
+    width: 64
+    enc_blk_nums: [1, 1, 1, 28]
+    middle_blk_num: 1
+    dec_blk_nums: [1, 1, 1, 1]
+  ]
+  path:[
+    pretrain_network_g: /home/cuhksz-aci-01/Workspace/BasicSR-master/experiments/201_NAFNet_DIV2K_Y_100k_P64B2G1/models/net_g_latest.pth
+    strict_load_g: True
+    results_root: /home/cuhksz-aci-01/Workspace/BasicSR-master/results/103_NAFNet_f64b16_DIV2K_Y
+    log: /home/cuhksz-aci-01/Workspace/BasicSR-master/results/103_NAFNet_f64b16_DIV2K_Y
+    visualization: /home/cuhksz-aci-01/Workspace/BasicSR-master/results/103_NAFNet_f64b16_DIV2K_Y/visualization
+  ]
+  val:[
+    save_img: True
+    suffix: None
+  ]
+  dist: False
+  rank: 0
+  world_size: 1
+  auto_resume: False
+  is_train: False
+
+2023-05-25 01:12:43,471 INFO: Dataset [PairedImageDataset] - Real is built.
+2023-05-25 01:12:43,471 INFO: Number of test images in Real: 15
+2023-05-25 01:12:43,471 INFO: Dataset [SingleImageDataset] - RealFace is built.
+2023-05-25 01:12:43,471 INFO: Number of test images in RealFace: 10
+2023-05-25 01:12:43,741 INFO: Network [NAFNetLocal] is created.
+2023-05-25 01:12:44,112 INFO: Network: NAFNetLocal, with parameters: 67,886,529
+2023-05-25 01:12:44,112 INFO: NAFNetLocal(
+  (intro): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (ending): Conv2d(64, 1, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (encoders): ModuleList(
+    (0): Sequential(
+      (0): NAFBlock(
+        (conv1): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=128)
+        (conv3): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[96, 96], base_size=(96, 96), stride=[96, 96], fast_imp=False)
+          (1): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+    )
+    (1): Sequential(
+      (0): NAFBlock(
+        (conv1): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=256)
+        (conv3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[48, 48], base_size=(96, 96), stride=[48, 48], fast_imp=False)
+          (1): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+    )
+    (2): Sequential(
+      (0): NAFBlock(
+        (conv1): Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=512)
+        (conv3): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[24, 24], base_size=(96, 96), stride=[24, 24], fast_imp=False)
+          (1): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+    )
+    (3): Sequential(
+      (0): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (1): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (2): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (3): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (4): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (5): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (6): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (7): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (8): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (9): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (10): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (11): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (12): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (13): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (14): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (15): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (16): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (17): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (18): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (19): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (20): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (21): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (22): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (23): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (24): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (25): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (26): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+      (27): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+    )
+  )
+  (decoders): ModuleList(
+    (0): Sequential(
+      (0): NAFBlock(
+        (conv1): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1024)
+        (conv3): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[12, 12], base_size=(96, 96), stride=[12, 12], fast_imp=False)
+          (1): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+    )
+    (1): Sequential(
+      (0): NAFBlock(
+        (conv1): Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=512)
+        (conv3): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[24, 24], base_size=(96, 96), stride=[24, 24], fast_imp=False)
+          (1): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+    )
+    (2): Sequential(
+      (0): NAFBlock(
+        (conv1): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=256)
+        (conv3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[48, 48], base_size=(96, 96), stride=[48, 48], fast_imp=False)
+          (1): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+    )
+    (3): Sequential(
+      (0): NAFBlock(
+        (conv1): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+        (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=128)
+        (conv3): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+        (sca): Sequential(
+          (0): AvgPool2d(kernel_size=[96, 96], base_size=(96, 96), stride=[96, 96], fast_imp=False)
+          (1): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (sg): SimpleGate()
+        (conv4): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+        (conv5): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+        (norm1): LayerNorm2d()
+        (norm2): LayerNorm2d()
+        (dropout1): Identity()
+        (dropout2): Identity()
+      )
+    )
+  )
+  (middle_blks): Sequential(
+    (0): NAFBlock(
+      (conv1): Conv2d(1024, 2048, kernel_size=(1, 1), stride=(1, 1))
+      (conv2): Conv2d(2048, 2048, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2048)
+      (conv3): Conv2d(1024, 1024, kernel_size=(1, 1), stride=(1, 1))
+      (sca): Sequential(
+        (0): AvgPool2d(kernel_size=[6, 6], base_size=(96, 96), stride=[6, 6], fast_imp=False)
+        (1): Conv2d(1024, 1024, kernel_size=(1, 1), stride=(1, 1))
+      )
+      (sg): SimpleGate()
+      (conv4): Conv2d(1024, 2048, kernel_size=(1, 1), stride=(1, 1))
+      (conv5): Conv2d(1024, 1024, kernel_size=(1, 1), stride=(1, 1))
+      (norm1): LayerNorm2d()
+      (norm2): LayerNorm2d()
+      (dropout1): Identity()
+      (dropout2): Identity()
+    )
+  )
+  (ups): ModuleList(
+    (0): Sequential(
+      (0): Conv2d(1024, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (1): PixelShuffle(upscale_factor=2)
+    )
+    (1): Sequential(
+      (0): Conv2d(512, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (1): PixelShuffle(upscale_factor=2)
+    )
+    (2): Sequential(
+      (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (1): PixelShuffle(upscale_factor=2)
+    )
+    (3): Sequential(
+      (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (1): PixelShuffle(upscale_factor=2)
+    )
+  )
+  (downs): ModuleList(
+    (0): Conv2d(64, 128, kernel_size=(2, 2), stride=(2, 2))
+    (1): Conv2d(128, 256, kernel_size=(2, 2), stride=(2, 2))
+    (2): Conv2d(256, 512, kernel_size=(2, 2), stride=(2, 2))
+    (3): Conv2d(512, 1024, kernel_size=(2, 2), stride=(2, 2))
+  )
+)
+2023-05-25 01:12:44,255 INFO: Loading NAFNetLocal model from /home/cuhksz-aci-01/Workspace/BasicSR-master/experiments/201_NAFNet_DIV2K_Y_100k_P64B2G1/models/net_g_latest.pth, with param key: [params].
+2023-05-25 01:12:44,334 INFO: Model [OpticModel] is created.
+2023-05-25 01:12:44,334 INFO: Testing Real...
+2023-05-25 01:12:46,572 INFO: Testing RealFace...
