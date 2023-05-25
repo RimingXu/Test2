@@ -10,6 +10,10 @@ FaceDUN appeared to be obviously rapples
 
 
  
+ There is a question that 
+ we have not know the train's elements size and the test's elements size.
+ There are different
+ and also are the things influence much
  
  
  
